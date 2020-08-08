@@ -1,0 +1,6 @@
+framework module Pods_Chaing {
+  umbrella header "Pods-Chaing-umbrella.h"
+
+  export *
+  module * { export * }
+}

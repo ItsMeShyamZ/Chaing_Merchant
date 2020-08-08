@@ -1,0 +1,91 @@
+PODS:
+  - Cosmos (22.1.0)
+  - CountryPickerView (3.1.2)
+  - DropDown (2.3.13)
+  - IQKeyboardManagerSwift (6.5.5)
+  - JWTDecode (2.4.1)
+  - lottie-ios (3.1.8)
+  - MarqueeLabel (4.0.2)
+  - PINCache (3.0.1-beta.8):
+    - PINCache/Arc-exception-safe (= 3.0.1-beta.8)
+    - PINCache/Core (= 3.0.1-beta.8)
+  - PINCache/Arc-exception-safe (3.0.1-beta.8):
+    - PINCache/Core
+  - PINCache/Core (3.0.1-beta.8):
+    - PINOperation (~> 1.1.1)
+  - PINOperation (1.1.2)
+  - PINRemoteImage (3.0.0):
+    - PINRemoteImage/PINCache (= 3.0.0)
+  - PINRemoteImage/Core (3.0.0):
+    - PINOperation
+  - PINRemoteImage/PINCache (3.0.0):
+    - PINCache (= 3.0.1-beta.8)
+    - PINRemoteImage/Core
+  - Socket.IO-Client-Swift (15.2.0):
+    - Starscream (~> 3.1)
+  - Starscream (3.1.1)
+  - StepSlider (1.7.0)
+  - SwiftEventBus (5.0.0)
+  - SwiftyJSON (5.0.0)
+
+DEPENDENCIES:
+  - Cosmos
+  - CountryPickerView
+  - DropDown
+  - IQKeyboardManagerSwift (>= 6.2.1)
+  - JWTDecode (~> 2.1)
+  - lottie-ios
+  - MarqueeLabel
+  - PINRemoteImage
+  - Socket.IO-Client-Swift
+  - StepSlider
+  - SwiftEventBus (from `https://github.com/cesarferreira/SwiftEventBus.git`, tag `5.0.1`)
+  - SwiftyJSON
+
+SPEC REPOS:
+  trunk:
+    - Cosmos
+    - CountryPickerView
+    - DropDown
+    - IQKeyboardManagerSwift
+    - JWTDecode
+    - lottie-ios
+    - MarqueeLabel
+    - PINCache
+    - PINOperation
+    - PINRemoteImage
+    - Socket.IO-Client-Swift
+    - Starscream
+    - StepSlider
+    - SwiftyJSON
+
+EXTERNAL SOURCES:
+  SwiftEventBus:
+    :git: https://github.com/cesarferreira/SwiftEventBus.git
+    :tag: 5.0.1
+
+CHECKOUT OPTIONS:
+  SwiftEventBus:
+    :git: https://github.com/cesarferreira/SwiftEventBus.git
+    :tag: 5.0.1
+
+SPEC CHECKSUMS:
+  Cosmos: 2795b36ad4bbea1af3050d6d65576ed63875f86a
+  CountryPickerView: 08ff5f391143aa79e2ae21b0eaa5c15395a80d22
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
+  IQKeyboardManagerSwift: 0fb93310284665245591f50f7a5e38de615960b7
+  JWTDecode: 4bd4da0cdf0f8154fd467fa48499f34ec057fb88
+  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
+  MarqueeLabel: f762aa681ae201f66c1d511858b171f75d83013a
+  PINCache: 534fd41d358d828dfdf227a0d327f3673a65e20b
+  PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
+  PINRemoteImage: e2b89e19fb6e77ffc099f9d9f3b3fe1745e3f9f9
+  Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
+  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
+  StepSlider: 59b86ed1d5204d5e52671f14ace1b37317bf0baa
+  SwiftEventBus: b30f617a6aca5a9336464b4d3f5931034762f2d5
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+
+PODFILE CHECKSUM: 5249416fc106756a07f4af186847e6aa73f22b82
+
+COCOAPODS: 1.9.1
