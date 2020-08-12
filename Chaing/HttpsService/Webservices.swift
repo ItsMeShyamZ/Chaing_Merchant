@@ -55,34 +55,34 @@ extension ApiClientError : LocalizedError{
     }
 }
 
-public class Reachability {
-    public func isConnectedToNetwork() -> Bool {
-        var zeroAddress = sockaddr_in()
-        zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
-        zeroAddress.sin_family = sa_family_t(AF_INET)
-
-        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
-            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-                SCNetworkReachabilityCreateWithAddress(nil, $0)
-            }
-        }) else {
-            return false
-        }
-
-        var flags: SCNetworkReachabilityFlags = []
-        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
-            return false
-        }
-        if flags.isEmpty {
-            return false
-        }
-
-        let isReachable = flags.contains(.reachable)
-        let needsConnection = flags.contains(.connectionRequired)
-
-        return (isReachable && !needsConnection)
-    }
-}
+//public class Reachability {
+//    public func isConnectedToNetwork() -> Bool {
+//        var zeroAddress = sockaddr_in()
+//        zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+//        zeroAddress.sin_family = sa_family_t(AF_INET)
+//
+//        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+//            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+//                SCNetworkReachabilityCreateWithAddress(nil, $0)
+//            }
+//        }) else {
+//            return false
+//        }
+//
+//        var flags: SCNetworkReachabilityFlags = []
+//        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+//            return false
+//        }
+//        if flags.isEmpty {
+//            return false
+//        }
+//
+//        let isReachable = flags.contains(.reachable)
+//        let needsConnection = flags.contains(.connectionRequired)
+//
+//        return (isReachable && !needsConnection)
+//    }
+//}
 
 class WebService {
     public static var shared = WebService()
@@ -91,7 +91,7 @@ class WebService {
     
     
     func loadData<T : Codable>(resource : Resource<T> , withAppURL isbase : isBaseApiURL = .yes , isLoaderNeed : YesNoType = .yes ,complition : @escaping (Swift.Result<T,ApiClientError> , _ statusCode : Int ) -> Void){
-        if Reachability().isConnectedToNetwork(){
+//        if Reachability().isConnectedToNetwork(){
             var urlString : String = isbase == .yes ? (Api.baseURL + resource.url) : (isbase == .settingurl ? (Api.settingURL + resource.url) : resource.url)
          
             guard let url : URL = URL(string: urlString) else {
@@ -149,16 +149,16 @@ class WebService {
                     Log.er(url : urlString ,"JSONERROR")
                 }
             }.resume()
-        }else{
-            let vc = OfflineVC.initVC(storyBoardName: .main, vc: OfflineVC.self, viewConrollerID: .offline)
-                     vc.bgImage = resource.vc.view.asImage()
-            resource.vc.present(vc: vc)
-        }
+//        }else{
+//            let vc = OfflineVC.initVC(storyBoardName: .main, vc: OfflineVC.self, viewConrollerID: .offline)
+//                     vc.bgImage = resource.vc.view.asImage()
+//            resource.vc.present(vc: vc)
+//        }
     }
     
     
     func imageUpload<T : Codable>(resource : Resource<T> , withAppURL isbase : isBaseApiURL = .yes , isLoaderNeed : YesNoType = .yes,imageToUpload : [ImageWithKey] ,complition : @escaping (Swift.Result<T,ApiClientError> , _ statusCode : Int ) -> Void){
-        if Reachability().isConnectedToNetwork(){
+//        if Reachability().isConnectedToNetwork(){
             let urlString : String = isbase == .yes ? (Api.baseURL + resource.url) : (isbase == .settingurl ? (Api.settingURL + resource.url) : resource.url)
             guard let url : URL = URL(string: urlString) else {return}
             var request  = URLRequest(url:url)
@@ -225,11 +225,11 @@ class WebService {
                     Log.er(url : urlString ,"JSONERROR")
                 }
             }.resume()
-        }else{
-            let vc = OfflineVC.initVC(storyBoardName: .main, vc: OfflineVC.self, viewConrollerID: .offline)
-            vc.bgImage = resource.vc.view.asImage()
-            resource.vc.present(vc: vc)
-        }
+//        }else{
+//            let vc = OfflineVC.initVC(storyBoardName: .main, vc: OfflineVC.self, viewConrollerID: .offline)
+//            vc.bgImage = resource.vc.view.asImage()
+//            resource.vc.present(vc: vc)
+//        }
     }
     
 }

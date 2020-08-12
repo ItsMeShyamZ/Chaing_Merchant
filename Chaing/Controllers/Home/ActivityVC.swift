@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class ActivityVC: UIViewController {
     
@@ -18,6 +19,8 @@ class ActivityVC: UIViewController {
     @IBOutlet weak var searchView : UIView!
     @IBOutlet weak var downloadBtn : UIButton!
     @IBOutlet weak var searchTxt : UITextField!
+    
+    var transation : TransactionListEntity = TransactionListEntity()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +28,10 @@ class ActivityVC: UIViewController {
         self.setupTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.getTransactionList()
+    }
     
     func setupView(){
         self.searchView.setCorneredElevation(shadow: 1, corner: 20, color: .gray, clipstobound: .yes)
@@ -43,23 +50,16 @@ class ActivityVC: UIViewController {
 
 extension ActivityVC : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return self.transation.transaction?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID.MessageCell.rawValue, for: indexPath) as! MessageCell
-        if indexPath.row == 0{
-            cell.nameLbl.setText("Fernando alonso", 20, fontStyle: .bold, isTitle: .yes, textColor: .black)
-            cell.price.setText("$ 100", 23, fontStyle: .bold, isTitle: .no, textColor: .primaryColor)
-            cell.dateLbl.setText("16 May", 16, fontStyle: .light, isTitle: .no, textColor: .grayColor)
-            cell.msgeLbl.setText("Expired", 16, fontStyle: .light, isTitle: .no, textColor: .grayColor)
-        }else if indexPath.row == 1{
-            cell.nameLbl.setText("Vicky", 20, fontStyle: .bold, isTitle: .yes, textColor: .black)
-            cell.price.setText("$ 400", 23, fontStyle: .bold, isTitle: .no, textColor: .primaryColor)
-            cell.dateLbl.setText("20 May", 15, fontStyle: .light, isTitle: .no, textColor: .grayColor)
-            cell.msgeLbl.setText("Cancelled", 15, fontStyle: .light, isTitle: .no, textColor: .grayColor)
-            
-        }
+            cell.nameLbl.setText((self.transation.transaction?[indexPath.row].customer?.first_name ?? ""), 20, fontStyle: .bold, isTitle: .yes, textColor: .black)
+        cell.price.setText("$ \(self.transation.transaction?[indexPath.row].amount ?? 0)", 23, fontStyle: .bold, isTitle: .no, textColor: .primaryColor)
+            cell.dateLbl.setText("\(self.transation.transaction?[indexPath.row].transaction_id ?? "")", 16, fontStyle: .light, isTitle: .no, textColor: .grayColor)
+            cell.msgeLbl.setText("\(self.transation.transaction?[indexPath.row].description ?? "")", 16, fontStyle: .light, isTitle: .no, textColor: .grayColor)
+        
         return cell
     }
     
@@ -76,4 +76,25 @@ extension ActivityVC : UITableViewDelegate,UITableViewDataSource {
         self.transcationTable.dataSource = self
         self.transcationTable.registerCell(withId:cellID.MessageCell)
     }
+}
+extension ActivityVC : PresenterOutputProtocol{
+    func showSuccess(api: String, dataArray: [Mappable]?, dataDict: Mappable?, modelClass: Any) {
+        switch String(describing: modelClass) {
+            case model.type.TransactionListEntity:
+                var data = dataDict as? TransactionListEntity
+                self.transcationTable.reloadData()
+                break
+            default: break
+        }
+    }
+    
+    func showError(error: CustomError) {
+        print("Error",error)
+    }
+    
+    
+    func getTransactionList(){
+        self.presenter?.HITAPI(api: Base.transactionlist.rawValue, params: nil, methodType: .GET, modelClass: TransactionListEntity.self, token: true)
+    }
+    
 }

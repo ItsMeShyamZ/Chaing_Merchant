@@ -1,6 +1,6 @@
 
 import UIKit
-
+import ObjectMapper
 
 
 class ViewController: UIViewController {
@@ -109,3 +109,16 @@ class ViewController: UIViewController {
 
 
 
+
+
+extension ViewController : PresenterOutputProtocol{
+    func showSuccess(api: String, dataArray: [Mappable]?, dataDict: Mappable?, modelClass: Any) {
+        
+    }
+    
+    func showError(error: CustomError) {
+        
+    }
+    
+    
+}

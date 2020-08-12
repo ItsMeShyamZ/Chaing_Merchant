@@ -46,11 +46,11 @@ class OfflineVC: UIViewController {
     }
     
     func checkReacblity(){
-        if Reachability().isConnectedToNetwork(){
-            self.dismiss(animated: true, completion: nil)
-        }else{
-            Log.e("No interner")
-        }
+//        if Reachability().isConnectedToNetwork(){
+//            self.dismiss(animated: true, completion: nil)
+//        }else{
+//            Log.e("No interner")
+//        }
     }
     
     func setupAnimation(){

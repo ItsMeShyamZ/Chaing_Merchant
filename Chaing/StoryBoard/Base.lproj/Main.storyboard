@@ -11,7 +11,7 @@
         <!--SplashVC-->
         <scene sceneID="jxw-Yo-p7a">
             <objects>
-                <viewController storyboardIdentifier="SplashVC" id="eZ9-gh-0n7" customClass="SplashVC" customModule="Chaing" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SplashVC" id="eZ9-gh-0n7" customClass="SplashVC" customModule="Chaing_Merchant_Merchant" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cuX-vf-Sxf">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -38,7 +38,7 @@
         <!--View Controller-->
         <scene sceneID="RjO-a9-Ufi">
             <objects>
-                <viewController storyboardIdentifier="ViewController" id="NTn-5C-hM4" customClass="ViewController" customModule="Chaing" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" id="NTn-5C-hM4" customClass="ViewController" customModule="Chaing_Merchant_Merchant" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dbk-Br-oCc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -162,7 +162,7 @@
         <!--AlertVC-->
         <scene sceneID="KOS-u0-dA1">
             <objects>
-                <viewController storyboardIdentifier="AlertVC" id="shn-0f-Uwl" customClass="AlertVC" customModule="Chaing" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AlertVC" id="shn-0f-Uwl" customClass="AlertVC" customModule="Chaing_Merchant_Merchant" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5Mc-no-x0S">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

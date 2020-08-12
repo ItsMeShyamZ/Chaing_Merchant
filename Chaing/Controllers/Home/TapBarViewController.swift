@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ObjectMapper
 
 var previousIndex : Int = 0
 
@@ -309,4 +310,17 @@ extension UIPageViewController {
             }
         }
     }
+}
+
+
+extension TapBarViewController : PresenterOutputProtocol{
+    func showSuccess(api: String, dataArray: [Mappable]?, dataDict: Mappable?, modelClass: Any) {
+        
+    }
+    
+    func showError(error: CustomError) {
+        
+    }
+    
+    
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import CountryPickerView
+import ObjectMapper
 
 class LoginVC: UIViewController {
     
@@ -19,7 +20,9 @@ class LoginVC: UIViewController {
     @IBOutlet weak var signupBtn : UIButton!
     @IBOutlet weak var doyouhaveAccountLbl : UILabel!
     @IBOutlet weak var titleLbl : UILabel!
-              
+    
+    @IBOutlet weak var passwordTxt : UITextField!
+    @IBOutlet weak var passwordView : UIView!
     
     
     override func viewDidLoad() {
@@ -30,9 +33,9 @@ class LoginVC: UIViewController {
     }
     
     func setupView(){
-        self.setupCountryPicker()
+        //        self.setupCountryPicker()
         self.loginBtn.setCorneredElevation(shadow: 2, corner: 20, color: .primaryColor)
-        [self.countryCodeView,self.phoneView].forEach { (view) in
+        [self.countryCodeView,self.phoneView,self.passwordView].forEach { (view) in
             view?.setCorneredElevation(shadow: 1, corner: 30, color: .white, clipstobound: .no)
             view?.layer.borderColor = UIColor.darkGray.cgColor
             view?.layer.borderWidth = 1
@@ -41,22 +44,21 @@ class LoginVC: UIViewController {
     }
     
     func setupData(){
-         self.countryCode.setCountryByPhoneCode(Constant.country_phcode)
-       
+        self.countryCode.setCountryByPhoneCode(Constant.country_phcode)
+        
     }
     
     func setupAction(){
         self.loginBtn.addTap {
-//            self.validation()
+            self.validation()
             
-            self.push(from: self, ToViewContorller: MoneyTransferVC.initVC(storyBoardName: .account, vc: MoneyTransferVC.self, viewConrollerID: .MoneyTransferVC))
         }
         
         self.signupBtn.addTap {
             
             self.push(from: self, ToViewContorller: SignupVC.initVC(storyBoardName: .account, vc: SignupVC.self, viewConrollerID: .signup))
         }
-     
+        
     }
     
     func validation(){
@@ -64,34 +66,51 @@ class LoginVC: UIViewController {
             showToast(msg: "Please Enter Mobile or Email Address")
             return
         }
+        guard let password = self.passwordTxt.text, password.isEmpty != true else {
+            showToast(msg: "Please Enter Password")
+            return
+        }
         
         var loginreq = LoginReq()
-        loginreq.username = self.phoneTxt.text ?? ""
-        loginreq.password = "123456"
+        loginreq.email = self.phoneTxt.text ?? ""
+        loginreq.password = password
         self.loginApi(with: loginreq)
         
     }
     
 }
 
-extension LoginVC : CountryPickerViewDelegate, CountryPickerViewDataSource{
-    func setupCountryPicker(){
-        countryCode.delegate = self
-        countryCode.dataSource = self
-        countryCode.showCountryCodeInView = false
-        countryCode.showPhoneCodeInView = true
-        countryCode.textColor = UIColor.blackColor
-        
-        self.countryCode.setCountryByPhoneCode(Constant.country_code)
-    }
-    func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: Country){
-        Log.i("CountryCode , \(country)")
-    }
-}
-
 
 extension LoginVC{
     func loginApi(with login_model : LoginReq){
-        AccountVM(vc: self).loginApiCall(data : convertToDictionary(model: login_model)!)
+        self.postLogin(loginData: login_model)
     }
+}
+extension LoginVC : PresenterOutputProtocol{
+    func showSuccess(api: String, dataArray: [Mappable]?, dataDict: Mappable?, modelClass: Any) {
+        switch String(describing: modelClass) {
+            case model.type.LoginEntity:
+                var data = dataDict as? LoginEntity
+                if !(data?.access_token ?? "").isEmpty{
+                    UserDefaultConfig.Token = data?.access_token ?? ""
+                    //                    showToast(msg: data?.token_type ?? "")
+                    UserDefaultConfig.AppState =  NavigationOption.home.rawValue
+                    self.push(from: self, ToViewContorller: MoneyTransferVC.initVC(storyBoardName: .account, vc: MoneyTransferVC.self, viewConrollerID: .MoneyTransferVC))
+                }else{
+                    //                    showToasts(msg: "The given data was invalid.")
+                }
+                break
+            default: break
+        }
+    }
+    
+    func showError(error: CustomError) {
+        print("Error",error)
+    }
+    
+    
+    func postLogin(loginData : LoginReq){
+        self.presenter?.HITAPI(api: Base.login.rawValue, params: convertToDictionary(model: loginData), methodType: .POST, modelClass: LoginEntity.self, token: true)
+    }
+    
 }

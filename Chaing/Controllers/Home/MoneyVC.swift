@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class MoneyVC: UIViewController {
     
@@ -40,6 +41,7 @@ class MoneyVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
+        self.setupAction()
         self.setupCollectionView()
     }
     
@@ -55,6 +57,32 @@ class MoneyVC: UIViewController {
             lbl?.layer.cornerRadius = 15
         }
         self.titleLbl.setText("Cash Card", 20, fontStyle: .bold, isTitle: .yes, textColor: .primaryColor)
+    }
+    
+    func setupAction(){
+        self.fiftyView.addTap {
+            self.amountTXt.text = "50"
+        }
+        self.hundView.addTap {
+            self.amountTXt.text = "100"
+        }
+        self.onefifView.addTap {
+            self.amountTXt.text = "1000"
+        }
+        
+        self.fiftyLbl.addTap {
+            self.amountTXt.text = "50"
+        }
+        self.hundLbl.addTap {
+            self.amountTXt.text = "100"
+        }
+        self.onefifLbl.addTap {
+            self.amountTXt.text = "1000"
+        }
+        
+        self.submitBtn.addTap {
+            self.validation()
+        }
     }
 
 }
@@ -94,5 +122,46 @@ extension MoneyVC : UICollectionViewDelegate,UICollectionViewDataSource, UIColle
         self.cardColection.registerCell(withId: cellID.CardViewCell)
     }
     
+    
+    func validation(){
+        guard let amount = self.amountTXt.text, amount.isEmpty != true else {
+            showToast(msg: "Enter the money")
+            return
+        }
+       
+        
+        var wallet = walletReq()
+        wallet.merchant_number = amount
+        self.addWallet(with: wallet)
+        
+    }
+    
+    
+}
+
+extension MoneyVC : PresenterOutputProtocol{
+    func showSuccess(api: String, dataArray: [Mappable]?, dataDict: Mappable?, modelClass: Any) {
+        switch String(describing: modelClass) {
+            case model.type.signupEntity:
+                var data = dataDict as? signupEntity
+                //                if !(data?.accesstoken ?? "").isEmpty{
+                //                    UserDefaultConfig.Token = data?.accesstoken ?? ""
+                //                    self.push(from: self, ToViewContorller: MoneyTransferVC.initVC(storyBoardName: .account, vc: MoneyTransferVC.self, viewConrollerID: .MoneyTransferVC))
+                //                }else{
+                //                }
+                self.pop(from: self)
+                break
+            default: break
+        }
+    }
+    
+    func showError(error: CustomError) {
+        print("Error",error)
+    }
+    
+    
+    func addWallet(with : walletReq){
+        self.presenter?.HITAPI(api: Base.wallet.rawValue, params: convertToDictionary(model: with), methodType: .POST, modelClass: signupEntity.self, token: true)
+    }
     
 }

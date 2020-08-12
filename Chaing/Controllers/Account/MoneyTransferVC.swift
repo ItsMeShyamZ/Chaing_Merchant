@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class MoneyTransferVC: UIViewController {
     
@@ -18,6 +19,7 @@ class MoneyTransferVC: UIViewController {
     @IBOutlet weak var ForTxt : UITextField!
     @IBOutlet weak var ForView : UIView!
     
+    @IBOutlet weak var amountTxt : UITextField!
     
     @IBOutlet weak var transferBtn : UIButton!
     @IBOutlet weak var ScanImg : UIImageView!
@@ -48,7 +50,7 @@ class MoneyTransferVC: UIViewController {
     
     func setupAction(){
         self.transferBtn.addTap {
-              self.push(from: self, ToViewContorller: TapBarViewController.initVC(storyBoardName: .home, vc: TapBarViewController.self, viewConrollerID: .TapBarView))
+            self.validation()
         }
         
         self.ScanImg.addTap {
@@ -61,8 +63,25 @@ class MoneyTransferVC: UIViewController {
     }
     
     func validation(){
-        var canLogin : Bool = true
+        guard let amount = self.amountTxt.text, amount.isEmpty != true else {
+            showToast(msg: "Transfer atleast $ 1")
+            return
+        }
+        guard let email = self.ToTxt.text, email.isEmpty != true else {
+            showToast(msg: "Please Enter your mailid or phonenumber")
+            return
+        }
+        guard let des = self.ForTxt.text, des.isEmpty != true else {
+            showToast(msg: "Please Enter Description")
+            return
+        }
         
+        
+        var transaction = transactionReq()
+        transaction.customer_number = email
+        transaction.amount = amount
+        transaction.description = des
+        self.posttransaction(with: transaction)
     }
     
 }
@@ -70,8 +89,25 @@ class MoneyTransferVC: UIViewController {
 
 
 
-extension SignupVC{
-    //    func loginApi(with login_model : LoginReq){
-    ////        AccountVM(vc: self).loginApiCall(data : convertToDictionary(model: login_model)!)
-    //    }
+extension MoneyTransferVC : PresenterOutputProtocol{
+    func showSuccess(api: String, dataArray: [Mappable]?, dataDict: Mappable?, modelClass: Any) {
+        switch String(describing: modelClass) {
+            case model.type.TransactionEntity:
+                var data = dataDict as? TransactionEntity
+                self.push(from: self, ToViewContorller: TapBarViewController.initVC(storyBoardName: .home, vc: TapBarViewController.self, viewConrollerID: .TapBarView))
+                
+                break
+            default: break
+        }
+    }
+    
+    func showError(error: CustomError) {
+        print("Error",error)
+    }
+    
+    
+    func posttransaction(with : transactionReq){
+        self.presenter?.HITAPI(api: Base.transaction.rawValue, params: convertToDictionary(model: with), methodType: .POST, modelClass: TransactionEntity.self, token: true)
+    }
+    
 }

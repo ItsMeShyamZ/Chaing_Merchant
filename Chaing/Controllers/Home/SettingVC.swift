@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class SettingVC: UIViewController {
 
@@ -40,7 +41,10 @@ class SettingVC: UIViewController {
         
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.getProfile()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.settingList()
@@ -54,7 +58,13 @@ class SettingVC: UIViewController {
         
     }
 
-
+    func setupDate(data : ProfileEntity){
+        if let profile : ProfileEntity = data{
+            self.nameLbl.text = (data.first_name ?? "") + " " + "\(data.last_name ?? "")"
+            self.numLbl.text = "\(data.email ?? "")"
+              self.upiLbl.text = "\(data.mobile ?? "")"
+        }
+    }
 }
 
 extension SettingVC : UITableViewDelegate,UITableViewDataSource {
@@ -90,4 +100,25 @@ struct SettingModel {
     var imageName : AssetName?
     var title: String = ""
     var subTitle : String = ""
+}
+extension SettingVC : PresenterOutputProtocol{
+    func showSuccess(api: String, dataArray: [Mappable]?, dataDict: Mappable?, modelClass: Any) {
+        switch String(describing: modelClass) {
+            case model.type.ProfileEntity:
+                var data = dataDict as? ProfileEntity
+                self.setupDate(data: data!)
+                break
+            default: break
+        }
+    }
+    
+    func showError(error: CustomError) {
+        print("Error",error)
+    }
+    
+    
+    func getProfile(){
+        self.presenter?.HITAPI(api: Base.profile.rawValue, params: nil, methodType: .GET, modelClass: ProfileEntity.self, token: true)
+    }
+    
 }
